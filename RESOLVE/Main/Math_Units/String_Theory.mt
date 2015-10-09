@@ -142,6 +142,10 @@ Precis String_Theory;
 	Corollary Str_Length_1_b:
 		For all alpha:SStr,
 			 (alpha = Empty_String) implies (|alpha| = 0);
+			 
+	Corollary Str_Length_1c:
+		For all alpha:SStr,
+			not(alpha = Empty_String) implies 1 <= |alpha|;
 
 	Corollary Str_Length_2: -- will not introduce |_| on its own, see add_ons at end
 		For all alpha,betax:SStr,
@@ -176,7 +180,7 @@ Precis String_Theory;
 				
 	Corollary Singleton_Str_1:
 		For all p:Prime_Str,
-			p /= Empty_String;
+			not(p = Empty_String);
 
 	Corollary Singleton_Str_2:
 		For all p:Prime_Str,
@@ -225,9 +229,9 @@ Precis String_Theory;
 		For all alpha:SStr,
 			Reverse(Reverse(alpha)) = alpha;
 
-	Corollary Reverse_4: -- Is_Bijective(Reverse); (only stating injectivity)
+	Corollary Reverse_4: -- Is_Bijective(Reverse);
 		For all alpha,beta:SStr,
-			(Reverse(alpha) = Reverse(beta)) implies (alpha = beta);
+			(Reverse(alpha) = Reverse(beta)) = (alpha = beta);
 
 	Corollary Reverse_5:
 		For all alpha,beta:SStr,
@@ -235,7 +239,7 @@ Precis String_Theory;
 
 	Corollary Reverse_6: -- Is_Left_Cancellative( o )
 		For all S,T,U:SStr,
-			((U o S) = (U o T)) implies (S = T);
+			((U o S) = (U o T)) = (S = T);
 
 	Corollary Reverse_7:
 		For all alpha,beta,gamma,delta:SStr,
@@ -281,7 +285,22 @@ Precis String_Theory;
 		For all alpha:SStr,
 		For all m,n:Z,
 			|Prt_Btwn(m,n,alpha)| = max( min(n,|alpha|) + -( max(m,0))  ,0);
+			
+	Corollary Prt_Btwn_6a:
+		For all alpha:SStr,
+		For all i,m,n:N,
+			(|Prt_Btwn(m,n,alpha)| = i and m <= n <= |alpha|) implies i = n + (-m);
 
+	Corollary Prt_Btwn_6b: -- 6a without negatives
+		For all alpha:SStr,
+		For all i,m,n:N,
+			(|Prt_Btwn(m,n,alpha)| = i and m <= n <= |alpha|) implies i <= n;
+			
+	Corollary Prt_Btwn_6c: -- 6a without negatives
+		For all alpha:SStr,
+		For all i,m,n:N,
+			(m + |Prt_Btwn(m,n,alpha)| = i and m <= n <= |alpha|) implies i = n;
+		
 	Corollary Prt_Btwn_7:
 		For all alpha:SStr,
 		For all m,n:Z,
@@ -342,6 +361,11 @@ Precis String_Theory;
 		For all alpha:SStr,
 		For all n:Z,
 			Reverse(Prt_Btwn(n,n+1,alpha)) = Prt_Btwn(n,n+1,alpha);
+			
+	-- We won't always have "+"
+	Corollary Prt_Btwn_12_c:
+		For all alpha:SStr,
+			Reverse(Prt_Btwn(0,1,alpha)) = Prt_Btwn(0,1,alpha);
 (*
 -- causes contrad
 	Corollary Prt_Btwn_13_a:
@@ -377,6 +401,10 @@ Precis String_Theory;
 		For all alpha:SStr,
 		For all n:Z,
 			1 <= n + 1 <= |alpha| implies <DeString(Prt_Btwn(n, n + 1, alpha))> = Prt_Btwn(n,n+1,alpha);
+			
+	Corollary DeString_2_no_addition_no_Length:
+		For all alpha:SStr,
+			not(alpha = Empty_String) implies <DeString(Prt_Btwn(0, 1, alpha))> = Prt_Btwn(0,1,alpha);
 			
     Definition Iterated_Concatenation(m : Z, n : Z, F: Z->SStr): SStr;
 	
@@ -421,7 +449,28 @@ Precis String_Theory;
 		For all F: Z->Prime_Str,	
 			Iterated_Concatenation_of_Prime_Str(m, n + 1, F) = 
 			Iterated_Concatenation_of_Prime_Str(m, n, F) o F(n + 1);
-						
+			
+(*	 Theorem Iterated_Concat_Equality:
+	 	For all m,n,x: Z,
+	 	For all s:ZSet,
+	 	For all F,G: Z->Prime_Str,
+	 		(ZSetCons(x) = s and m <= x and x <= n and F(x) = G(x)) =
+	 		(Iterated_Concatenation_of_Prime_Str(m,n,F) = Iterated_Concatenation_of_Prime_Str(m,n,G));
+	 		
+	 Theorem Iterated_Concat_Implication_1:
+	 	For all m,n,x,y: Z,
+	 	For all F,G: Z->Prime_Str,
+	 		isSubsetOrEq(ZSetCons(y), ZSetCons(x)) and m <= x and x <= n and F(x) = G(y)) =
+	 		(Iterated_Concatenation_of_Prime_Str(m,n,F) = Iterated_Concatenation_of_Prime_Str(m,n,G));
+	 		
+	 Definition IF_THEN: B * B -> B; -- Meta-function trigger for prover (may spawn new VC)
+	 
+	 Theorem Iterated_Concat_Eq_On_Interval:
+	 	For all m,n:Z,
+	 	For all f,g:Z->Entity,
+		(FR(F, ZSetConsB( lambda(k:Z).(m <= k and k <= n) )) = FR(G, ZSetConsB(lambda(k:Z).(m <= k and k <= n))))
+	 	= (Iterated_Concatenation_of_Prime_Str(m,n,F) = Iterated_Concatenation_of_Prime_Str(m,n,G) );
+*)						
 	Corollary Str_Length_forced_introduction:
 		For all alpha,beta,gamma:SStr,
 			alpha o beta = gamma implies |gamma| = |alpha| + |beta|;

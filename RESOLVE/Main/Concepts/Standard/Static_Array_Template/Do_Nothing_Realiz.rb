@@ -15,9 +15,10 @@ Realization Do_Nothing_Realiz for Do_Nothing_Capability of Static_Array_Template
 		Swap_Entry(A, Temp, i);
 		Increment(i);
 	end;
-	If (i = Upper_Bound) then	
+	(*If (i = Upper_Bound) then	
 		Swap_Entry(A, Temp, i);
 		Swap_Entry(A, Temp, i);
-	end;
+		
+	end; *)
     end Do_Nothing;
 end Do_Nothing_Realiz;
